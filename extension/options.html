@@ -1,0 +1,92 @@
+<html>
+	<head>
+		<link href="jquery-ui.css" rel="stylesheet" type="text/css"/>
+		<script src="jquery.js"></script>
+		<script src="jquery-ui.js"></script>
+		
+		<script src="options.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	
+	<body>
+	
+		<div id="header">
+			<div id="app-name">
+				<a href="http://webcomputing.iit.bme.hu/" target="_blank">GRIDBEE</a>
+			</div>
+			<div id="app-description">
+				the grid computing web app
+			</div>
+		</div>
+	
+		<div id="content">
+			<div id="tabs">
+				<ul>
+					<li><a href="#tabs-1">Control</a></li>
+					<li><a href="#tabs-2">Configuration</a></li>
+					<li><a href="#tabs-3">Log</a></li>
+				</ul>
+				
+				<div id="tabs-1">
+					<fieldset id="control">
+						<legend>Control</legend>
+
+						<span class="group">
+							<img src="images/play.png" id="start" class="button" />
+							<img src="images/pause.png" id="stop" class="button" style="display: hide;" />
+						</span>
+						
+						<span class="group">
+							<div id="threadControl">
+								<img src="images/minus.png" id="minus" class="button" title="remove thread" />
+								<span id="threadNums">1</span>
+								<img src="images/plus.png" id="plus" class="button" title="add thread" />
+							</div>
+						</span>
+						
+						<span class="group">
+							<label>Auto start: </label><div id="autostart" class="button unchecked" title="Auto start"></div>
+						</span>
+					</fieldset>
+					
+					<fieldset>
+						<legend>Progress</legend>
+						<div id="progress">
+							<div id="0">
+								<div class="id">1. thread</div>
+								<div class="status">Passive</div>
+								<div class="progress">0%</div>
+							</div>
+
+						</div>
+					</fieldset>
+				</div>
+				
+				<div id="tabs-2">
+					<fieldset id="configuration">
+						<!-- <legend>Configurations</legend> -->
+						<label for="projecturl">Project url:</label><input type="text" id="projecturl" value="" /><br/>
+						<label for="scheduler">Scheduler:</label><input type="text" id="scheduler" value="" /><br/>
+						<label for="authkey">Auth key:</label><input type="text" id="authkey" value="" /><br/>			
+						<input type="button" id="saveConfig" value="Save" />
+					</fieldset>
+				</div>
+				
+				<div id="tabs-3">
+					<fieldset id="log">
+						<!-- <legend>Log</legend> -->
+						<div id="log-content"></div>
+						<input type="button" id="clearLog" value="Clear" />
+					</fieldset>
+				</div>
+			</div>
+		</div>
+		
+		<div id="footer">
+			GRIDBEE&nbsp;&nbsp;&nbsp;|
+			&nbsp;&nbsp;&nbsp;<a href="http://www.ik.bme.hu/en">BME IK</a>&nbsp;&nbsp;&nbsp;|
+			&nbsp;&nbsp;&nbsp;2012
+		</div>
+		
+	</body>
+</html>
