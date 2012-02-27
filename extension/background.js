@@ -49,6 +49,9 @@ $(document).ready(function()
 				{
 					start();
 					port.postMessage({msg: "userMessage", message: "Started"});
+					
+					port.postMessage({msg: "threadNumber", threadNums: client.getThreadNumber()});
+					sendMessage({msg: "status", running: started});
 				}
 				else
 				{
@@ -87,10 +90,10 @@ $(document).ready(function()
 	function init()
 	{
 		projecturl = localStorage.getItem("projecturl");
-		scheduler = localStorage.getItem("scheduler");
-		authkey = localStorage.getItem("authkey");
-			
-		if (projecturl == null || projecturl.length < 3 || scheduler == null || scheduler.length < 3 || authkey == null || authkey < 3)
+		var email = localStorage.getItem("email");
+		var password = localStorage.getItem("password");
+
+		if (projecturl == null || projecturl.length < 3 || email == null || email.length < 3 || password == null || password.length < 3)
 		{
 			if (firstStart == "false")
 			{
@@ -102,25 +105,57 @@ $(document).ready(function()
 			{
 				window.open("options.html");
 			}
-			return;
-		}
-		
-		if (client == null)
-		{
-			client = new gridbee.core.control.Client("GridBee");
-			
-			client.onLog.subscribe(function(e)
-			{
-				console.log(e.message);
-				sendMessage({msg: "log", message: e.message, level: e.level});
-			});
 		}
 		else
 		{
-			while (client.getWorksources().length > 0)							// ?!?!?!?!
+			// parameters are ok
+	
+			if (client == null)
 			{
-				client.removeWorksource(client.getWorksources()[0]);
+				client = new gridbee.core.control.Client("GridBee");
+				
+				client.onLog.subscribe(function(e)
+				{
+					console.log(e.message);
+					sendMessage({msg: "log", message: e.message, level: e.level});
+				});
 			}
+			else
+			{
+				while (client.getWorksources().length > 0)							// ?!?!?!?!
+				{
+					client.removeWorksource(client.getWorksources()[0]);
+				}
+			}
+	
+			var rpc = client.CreateBoincWebRPCHandler(projecturl);
+			var lookup = rpc.lookupAccount(email, password);
+			lookup.oncomplete.subscribe(function()
+			{
+				authkey = lookup.getResult().Auth;
+				
+				getSchedulerUrl(projecturl, function(sch)
+				{
+					scheduler = sch;
+					console.log("Scheduler: "+scheduler);
+					initS2();
+				});
+			});
+			lookup.onerror.subscribe(function()
+			{
+				alert("lookupAccount rpc call failed!");
+			});
+		}
+	}
+	
+	function initS2()
+	{	
+		if (projecturl == null || projecturl.length < 3 || scheduler == null || scheduler.length < 3 || authkey == null || authkey < 3)
+		{
+			console.log("Initialization failed!");
+			sendMessage({msg: "log", message: "Initialization failed!", level: {0: "L0_Critical", 1: 0}});
+			alert("Initialization failed!");
+			return;
 		}
 		
 		var threadNumber = parseInt(localStorage.getItem("threadNumber"));
@@ -191,6 +226,28 @@ $(document).ready(function()
 			document.port.postMessage(message);
 		}
 	}
+	
+	function getSchedulerUrl(projecturl, callback)
+	{
+      return $.ajax({
+        url: projecturl,
+        success: function(data, status)
+				{
+          var link, links, schedulers, url_re, _i, _len;
+          links = data.match(/<link rel="boinc_scheduler" [^>]*>/g);
+          url_re = /[^"]*(?="\s*>$)/;
+          for (_i = 0, _len = links.length; _i < _len; _i++)
+					{
+            link = links[_i];
+            schedulers = link.match(url_re);
+          }
+          callback(schedulers[0]);
+        },
+        error: function()
+				{
+        }
+      });
+    };
 });
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse)

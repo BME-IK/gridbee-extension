@@ -3,8 +3,8 @@ $(document).ready(function()
 	$("#tabs").tabs();
 
 	var projecturl = $("#projecturl");
-	var scheduler = $("#scheduler");
-	var authkey = $("#authkey");
+	var email = $("#email");
+	var password = $("#password");
 	var log = $("#log-content");
 	var autostart = $("#autostart");
 	
@@ -20,8 +20,8 @@ $(document).ready(function()
 	}
 
 	projecturl.val(localStorage.getItem("projecturl"));
-	scheduler.val(localStorage.getItem("scheduler"));
-	authkey.val(localStorage.getItem("authkey"));
+	email.val(localStorage.getItem("email"));
+	password.val(localStorage.getItem("password"));
 
 	var port = chrome.extension.connect({name: "knockknock"});
 	port.onMessage.addListener(function(rcvdMsg)
@@ -105,11 +105,11 @@ $(document).ready(function()
   {
 		console.log("saveConfig.click");
 	
-		console.log(projecturl.val()+" - "+scheduler.val()+" - "+authkey.val());
+		console.log(projecturl.val()+" - "+email.val()+" - "+password.val());
 		
 		localStorage.setItem("projecturl", projecturl.val());
-		localStorage.setItem("scheduler", scheduler.val());
-		localStorage.setItem("authkey", authkey.val());
+		localStorage.setItem("email", email.val());
+		localStorage.setItem("password", password.val());
 		
 		port.postMessage({msg: "configUpdated"});
 	});
@@ -158,8 +158,7 @@ $(document).ready(function()
 			
 			var progress = $("<div></div>").addClass("progress").html("0%&nbsp;")
 			newChild.append(progress);
-		}
-		
+		}		
 	}
 	
 	function setWorkUnitStatus(id, status)
