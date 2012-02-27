@@ -12,7 +12,4 @@ Game directory: a very simple game to demonstrate how can you get credit informa
 Demo project access
 ===================
 
-We provide you a demo project access to can try it. After you installed the extension you have to go to configuration tab and enter the follow parameters.
-Project url: http://bvp6.hpc.iit.bme.hu/w2g/
-Scheduler: http://bvp6.hpc.iit.bme.hu/w2g_cgi/cgi
-Auth key: 2962b0b8970c4ca693d953da648724cd
+We provide you a demo project to you can try it. After you installed the extension you have to go to configuration tab. Demo project url: http://bvp6.hpc.iit.bme.hu/w2g/
